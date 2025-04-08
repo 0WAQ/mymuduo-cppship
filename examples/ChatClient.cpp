@@ -11,18 +11,17 @@
 
 int main(int argc, char* argv[])
 {
-    std::string ip{"127.0.0.1"};
+    std::string ipv4("127.0.0.1");
     int port = 5678;
 
-    switch (argc)
-    {
+    switch (argc) {
     case 1:
         break;
     case 2:
         port = atoi(argv[1]);
         break;
     case 3:
-        ip = argv[1];
+        ipv4 = argv[1];
         port = atoi(argv[21]);
         break;
     default:
@@ -31,7 +30,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    int sock_fd;
+    int sock_fd = 0;
     if((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         std::cerr << "socket() failed.\n";
         return -1;
@@ -40,11 +39,11 @@ int main(int argc, char* argv[])
     sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr(ip.c_str());
+    serv_addr.sin_addr.s_addr = inet_addr(ipv4.c_str());
     serv_addr.sin_port = htons(port);
 
     if(connect(sock_fd, (sockaddr*)&serv_addr, sizeof(serv_addr)) != 0) {
-        printf("connect(%s: %s) failed.\n", ip.c_str(), port);
+        printf("connect(%s: %s) failed.\n", ipv4.c_str(), std::to_string(port).c_str());
         close(sock_fd);
         return -1;
     }
@@ -62,20 +61,20 @@ int main(int argc, char* argv[])
         
 
         int len = strlen(buf);      // 计算报文大小
-        memcpy(tmpbuf, &len, 4);    // 拼接报文头部
-        memcpy(tmpbuf + 4, buf, len);   // 拼接报文内容
+        memcpy((void*)tmpbuf, &len, 4);    // 拼接报文头部
+        memcpy((void*)&tmpbuf[4], (const void*)buf, len);   // 拼接报文内容
 
-        send(sock_fd, tmpbuf, len + 4, 0);
+        send(sock_fd, (const void*)tmpbuf, len + 4, 0);
 
 
-        memset(buf, 0, sizeof(buf));
+        memset((void*)buf, 0, sizeof(buf));
         len = 0;
         
         recv(sock_fd, &len, 4, 0);
-        memset(buf, 0, sizeof(buf));
-        recv(sock_fd, buf, len, 0);
+        memset((void*)buf, 0, sizeof(buf));
+        recv(sock_fd, (void*)buf, len, 0);
 
-        std::cout << "recv: " << buf << std::endl;
+        std::cout << "recv: " << (const char*)buf << std::endl;
     }
 
     return 0;
