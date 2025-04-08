@@ -11,7 +11,21 @@
 
 int main(int argc, char* argv[])
 {
-    if(argc != 3) {
+    std::string ip{"127.0.0.1"};
+    int port = 5678;
+
+    switch (argc)
+    {
+    case 1:
+        break;
+    case 2:
+        port = atoi(argv[1]);
+        break;
+    case 3:
+        ip = argv[1];
+        port = atoi(argv[21]);
+        break;
+    default:
         std::cout << "Usage: ./client <ip> <port>.\n";
         std::cout << "Example: ./client 127.0.0.1 5678\n";
         return -1;
@@ -26,11 +40,11 @@ int main(int argc, char* argv[])
     sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
-    serv_addr.sin_port = htons(atoi(argv[2]));
+    serv_addr.sin_addr.s_addr = inet_addr(ip.c_str());
+    serv_addr.sin_port = htons(port);
 
     if(connect(sock_fd, (sockaddr*)&serv_addr, sizeof(serv_addr)) != 0) {
-        printf("connect(%s: %s) failed.\n", argv[1], argv[2]);
+        printf("connect(%s: %s) failed.\n", ip.c_str(), port);
         close(sock_fd);
         return -1;
     }

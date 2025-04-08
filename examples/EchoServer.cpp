@@ -86,17 +86,36 @@ private:
 
 int main(int argc, char* argv[])
 {
-    if(argc != 4) {
-        std::cout << "Usage: ./tcp_epoll <ip> <port> <log_dir>\n";
-        std::cout << "Example: ./tcp_epoll 127.0.0.1 5678 ../../log\n";
+    std::string ip{"127.0.0.1"}, path{"log/"};
+    int port = 5678;
+
+    switch (argc)
+    {
+    case 1:
+        break;
+    case 2:
+        path = argv[1];
+        break;
+    case 3:
+        port = atoi(argv[1]);
+        path = argv[2];
+        break;
+    case 4:
+        ip = argv[1];
+        port = atoi(argv[2]);    
+        path = argv[3];
+        break;
+    default:
+        std::cerr << "Usage: ./EchoServer [<ip>] [<port>] [<log_dir>]\n";
+        std::cerr << "Example: ./EchoServer 127.0.0.1 5678 log/\n";
         return -1;
     }
 
-    mymuduo::Logger* log = mymuduo::Logger::get_instance(argv[3], "EchoServer");
+    mymuduo::Logger* log = mymuduo::Logger::get_instance(path, "EchoServer");
     log->init(mymuduo::Logger::DEBUG);
 
     mymuduo::EventLoop loop;
-    mymuduo::InetAddress addr(argv[1], atoi(argv[2]));
+    mymuduo::InetAddress addr(ip, port);
     std::string name{"EchoServer-01"};
 
     EchoServer *server = new EchoServer(&loop, addr, name);
