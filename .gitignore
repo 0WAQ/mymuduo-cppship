@@ -4,5 +4,4 @@
 .build/
 build
 log/*
-bin/
 wfuzz.json
