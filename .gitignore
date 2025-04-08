@@ -1,0 +1,8 @@
+.vscode/
+.wfuzztmp/
+.cache
+.build/
+build
+log/
+bin/
+wfuzz.json

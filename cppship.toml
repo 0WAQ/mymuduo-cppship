@@ -1,0 +1,6 @@
+[package]
+name = "libmymuduo-cppship"
+version = "0.1.0"
+std = 20
+
+[dependencies]
