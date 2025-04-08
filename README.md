@@ -113,6 +113,8 @@ int main(int argc, char* argv[])
     return 0;
 }
 ```
+## 包管理器
+    1. https://github.com/qqiangwu/cppship/blob/main/README.md
 ## 安装
 ```shell
 $ git clone git@github.com:0WAQ/myTinyMuduo.git
