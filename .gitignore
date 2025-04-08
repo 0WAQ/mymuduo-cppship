@@ -3,6 +3,6 @@
 .cache
 .build/
 build
-log/
+log/*
 bin/
 wfuzz.json

@@ -117,7 +117,8 @@ int main(int argc, char* argv[])
 ```shell
 $ git clone git@github.com:0WAQ/myTinyMuduo.git
 $ cd myTinyMuduo
-$ ./build.sh
+$ cppship build
+$ cppship run --example EchoServer -- 127.0.0.1 5678 
 ```
 ## 参考资料
     1. 陈硕的muduo库: https://github.com/chenshuo/muduo
